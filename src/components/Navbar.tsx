@@ -25,11 +25,11 @@ const Navbar = ({ showAdmin = true, showLeaderboard = false, quizId, transparent
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-base">SQ</span>
+            <div className="h-9 flex items-center justify-center">
+              <img src="/logos/darkya-emblem.png" alt="Yashoda AI" className="h-8" />
             </div>
             <h1 className="text-xl font-bold">
-              <span className="text-primary">Swift</span>Quiz
+              <span className="text-primary">Yashoda</span> Quiz
             </h1>
           </Link>
           

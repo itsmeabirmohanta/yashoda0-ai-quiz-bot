@@ -430,26 +430,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t py-8 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-2">
-                <span className="text-primary-foreground font-bold text-sm">SQ</span>
-              </div>
-              <h2 className="text-lg font-bold">
-                <span className="text-primary">Swift</span>Quiz
-              </h2>
-            </div>
-            
-            <div className="text-center md:text-right text-sm text-muted-foreground">
-              <p>&copy; {new Date().getFullYear()} SwiftQuiz. Built with ❤️ for educators and learners.</p>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
