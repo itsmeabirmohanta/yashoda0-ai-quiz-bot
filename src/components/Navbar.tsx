@@ -27,13 +27,13 @@ const Navbar = ({ showAdmin = true, showLeaderboard = false, quizId, transparent
 
   return (
     <header className={`border-b ${transparent ? 'bg-card/50 backdrop-blur sticky top-0 z-50' : 'bg-card'}`}>
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="h-9 flex items-center justify-center">
-              <img src="/logos/darkya-emblem.png" alt="Yashoda AI" className="h-8" />
+            <div className="h-8 sm:h-9 flex items-center justify-center">
+              <img src="/logos/darkya-emblem.png" alt="Yashoda AI" className="h-7 sm:h-8" />
             </div>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-lg sm:text-xl font-bold">
               <span className="text-primary">Yashoda</span> Quiz
             </h1>
           </Link>
@@ -100,7 +100,7 @@ const Navbar = ({ showAdmin = true, showLeaderboard = false, quizId, transparent
         
         {/* Mobile Menu Dropdown */}
         {isMobile && mobileMenuOpen && (
-          <div className="mt-3 py-3 border-t flex flex-col gap-2 animate-in fade-in slide-in-from-top-5 duration-300">
+          <div className="mt-2 py-2 sm:py-3 border-t flex flex-col gap-2 animate-in fade-in slide-in-from-top-5 duration-300">
             {showLeaderboard && quizId && (
               <Button 
                 asChild 

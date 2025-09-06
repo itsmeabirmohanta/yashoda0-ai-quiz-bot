@@ -134,24 +134,24 @@ const Home = () => {
       {/* Hero Section with Code Entry */}
       <section className="pt-16 md:pt-24 pb-12 px-4 relative overflow-hidden">
         <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="text-left md:pr-8">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 md:mb-6">
                 Join a <span className="text-primary">Quiz</span> in Seconds
               </h1>
               
-              <p className="text-xl text-muted-foreground mb-8">
+              <p className="text-lg sm:text-xl text-muted-foreground mb-6 md:mb-8">
                 Enter your 6-character code below to join a quiz. No account required.
               </p>
               
-              <div className="flex flex-col gap-6 mb-8">
+              <div className="flex flex-col gap-4 md:gap-6 mb-6 md:mb-8">
                 {/* Code entry boxes */}
-                <div className="flex justify-between gap-2">
+                <div className="flex justify-between gap-1 sm:gap-2">
                   {charInputs.map((char, index) => (
                     <Input
                       key={index}
                       id={`char-input-${index}`}
-                      className="h-16 w-12 text-center text-2xl font-bold p-0 border-2 focus:border-primary"
+                      className="h-12 sm:h-14 md:h-16 w-10 sm:w-12 text-center text-xl sm:text-2xl font-bold p-0 border-2 focus:border-primary"
                       maxLength={index === 0 ? 6 : 1} // Allow pasting full code in first input
                       value={char}
                       onChange={(e) => handleInputChange(index, e.target.value)}
@@ -166,12 +166,12 @@ const Home = () => {
                   onClick={handleQuizCodeSubmit} 
                   disabled={isSearching || !isCodeValid}
                   size="lg" 
-                  className="w-full text-lg"
+                  className="w-full text-base sm:text-lg h-auto py-2 sm:py-3"
                 >
                   {isSearching ? (
-                    <div className="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-current mr-3"></div>
+                    <div className="inline-block animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-current mr-2 sm:mr-3"></div>
                   ) : (
-                    <Play className="w-5 h-5 mr-3" />
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
                   )}
                   Start Quiz
                 </Button>
@@ -211,14 +211,14 @@ const Home = () => {
       </section>
 
       {/* Features */}
-      <section className="py-16 px-4 relative">
+      <section className="py-12 sm:py-16 px-4 relative">
         <div className="container mx-auto max-w-6xl relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold">How SwiftQuiz Works</h2>
-            <div className="w-20 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold">How SwiftQuiz Works</h2>
+            <div className="w-16 sm:w-20 h-1 bg-primary mx-auto mt-3 sm:mt-4 rounded-full"></div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             <Card className="bg-background/95 backdrop-blur border-2 hover:border-primary/30 transition-all duration-300 overflow-hidden">
               <div className="h-2 bg-primary"></div>
               <CardHeader>
@@ -273,13 +273,13 @@ const Home = () => {
       </section>
 
       {/* Features + Leaderboard Preview */}
-      <section className="py-16 px-4 relative overflow-hidden">
+      <section className="py-12 sm:py-16 px-4 relative overflow-hidden">
         <div className="container mx-auto max-w-5xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className="space-y-6 sm:space-y-8">
               <div>
-                <h3 className="text-3xl font-bold mb-6">Perfect for Any Occasion</h3>
-                <div className="space-y-6">
+                <h3 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Perfect for Any Occasion</h3>
+                <div className="space-y-4 sm:space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
                       <Clock className="w-6 h-6 text-primary" />
@@ -313,31 +313,31 @@ const Home = () => {
               </div>
               
               {user ? (
-                <Button asChild size="lg">
+                <Button asChild size="lg" className="h-auto py-2 sm:py-3 text-base sm:text-lg">
                   <Link to="/admin">
-                    Create Your Quiz <ArrowRight className="ml-2 w-5 h-5" />
+                    Create Your Quiz <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
                   </Link>
                 </Button>
               ) : (
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg" variant="outline" className="h-auto py-2 sm:py-3 text-base sm:text-lg">
                   <Link to="/signin">
-                    Sign In to Create Quizzes <ArrowRight className="ml-2 w-5 h-5" />
+                    Sign In to Create Quizzes <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
                   </Link>
                 </Button>
               )}
             </div>
             
-            <div className="relative">
-              <div className="bg-primary/5 absolute inset-0 rounded-3xl rotate-3 transform"></div>
+            <div className="relative mt-6 md:mt-0">
+              <div className="bg-primary/5 absolute inset-0 rounded-2xl sm:rounded-3xl rotate-3 transform"></div>
               <Card className="bg-background/95 backdrop-blur border-2 relative overflow-hidden">
                 <CardHeader className="border-b pb-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-xl">Live Leaderboard</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">Live Leaderboard</CardTitle>
                     <div className="bg-green-500/20 text-green-700 text-xs px-2 py-1 rounded-full border border-green-500/20">
                       Live Results
                     </div>
                   </div>
-                  <CardDescription>Geography Quiz • 10 Questions</CardDescription>
+                  <CardDescription className="text-xs sm:text-sm">Geography Quiz • 10 Questions</CardDescription>
                 </CardHeader>
                 <CardContent className="py-4">
                   <div className="space-y-3">
@@ -404,15 +404,16 @@ const Home = () => {
       </section>
 
       {/* Call to action */}
-      <section className="py-16 px-4 bg-primary/10">
+      <section className="py-12 sm:py-16 px-4 bg-primary/10">
         <div className="container mx-auto text-center max-w-3xl">
-          <h2 className="text-3xl font-bold mb-4">Ready to Quiz?</h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to Quiz?</h2>
+          <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
             Enter your quiz code at the top of this page or create your own quizzes to share
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Button 
               size="lg"
+              className="h-auto py-2 sm:py-3 text-base sm:text-lg"
               onClick={() => {
                 document.getElementById('char-input-0')?.focus();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -421,7 +422,7 @@ const Home = () => {
               Enter Quiz Code
             </Button>
             {!user && (
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="h-auto py-2 sm:py-3 text-base sm:text-lg">
                 <Link to="/signin">
                   Sign In to Create Quizzes
                 </Link>

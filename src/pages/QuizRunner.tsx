@@ -304,10 +304,10 @@ const QuizRunner = () => {
       <div className="min-h-screen bg-background">
         <Navbar showAdmin={false} showLeaderboard={false} transparent={true} />
         <div className="flex items-center justify-center h-[80vh]">
-          <div className="text-center p-4 sm:p-8">
-            <div className="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-primary border-t-2"></div>
-            <p className="mt-4 text-base sm:text-lg font-medium text-primary">Loading quiz...</p>
-            <p className="text-muted-foreground mt-2 text-sm sm:text-base px-6">Please wait while we prepare your questions</p>
+          <div className="text-center p-4">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 border-b-2 border-primary border-t-2"></div>
+            <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg font-medium text-primary">Loading quiz...</p>
+            <p className="text-muted-foreground mt-1 sm:mt-2 text-xs sm:text-sm md:text-base px-4 sm:px-6">Please wait while we prepare your questions</p>
           </div>
         </div>
       </div>
@@ -318,17 +318,17 @@ const QuizRunner = () => {
     return (
       <div className="min-h-screen bg-background">
         <Navbar showAdmin={false} transparent={true} />
-        <div className="flex items-center justify-center h-[80vh] px-4">
-          <Card className="text-center p-6 sm:p-8 max-w-md shadow-lg border-2 w-full">
-            <CardContent>
-              <div className="text-muted-foreground mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <div className="flex items-center justify-center h-[80vh] px-3 sm:px-4">
+          <Card className="text-center p-4 sm:p-6 md:p-8 max-w-md shadow-lg border-2 w-full">
+            <CardContent className="p-0">
+              <div className="text-muted-foreground mb-3 sm:mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-2 sm:mb-4 sm:w-10 sm:h-10"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold mb-3">Quiz Not Available</h2>
-              <p className="text-muted-foreground mb-6 text-sm sm:text-base">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3">Quiz Not Available</h2>
+              <p className="text-muted-foreground mb-4 sm:mb-6 text-xs sm:text-sm md:text-base">
                 This quiz is either closed or doesn't exist.
               </p>
-              <Button asChild className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
+              <Button asChild className="bg-primary hover:bg-primary/90 w-full text-sm sm:text-base h-auto py-1.5 sm:py-2">
                 <Link to="/">Return to Home</Link>
               </Button>
             </CardContent>
@@ -345,7 +345,7 @@ const QuizRunner = () => {
       <Navbar showAdmin={false} showLeaderboard={true} quizId={quizId} transparent={true} />
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-2xl">
         {/* Quiz Progress */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-4 sm:mb-6 md:mb-8">
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-semibold text-sm sm:text-base">
               Question {currentQuestionIndex + 1} of {questions.length}
@@ -367,20 +367,20 @@ const QuizRunner = () => {
 
         {/* Question Card */}
         <Card className="shadow-sm border-2 overflow-hidden">
-          <CardHeader className="pb-3 sm:pb-4 pt-4 sm:pt-6 px-4 sm:px-6">
-            <CardTitle className="text-lg sm:text-xl break-words whitespace-normal overflow-hidden leading-normal">{currentQuestion?.text}</CardTitle>
+          <CardHeader className="pb-2 sm:pb-3 md:pb-4 pt-3 sm:pt-4 md:pt-6 px-3 sm:px-4 md:px-6">
+            <CardTitle className="text-base sm:text-lg md:text-xl break-words whitespace-normal overflow-hidden leading-normal">{currentQuestion?.text}</CardTitle>
           </CardHeader>
-          <CardContent className="px-4 sm:px-6 pb-5">
+          <CardContent className="px-3 sm:px-4 md:px-6 pb-4 sm:pb-5">
             <div className="space-y-2 sm:space-y-3">
               {currentQuestion?.options.map((option) => (
                 <Button
                   key={option.id}
                   variant="outline"
-                  className="w-full justify-start text-left p-3 sm:p-4 h-auto break-words hover:bg-primary/5 hover:border-primary/30 transition-colors"
+                  className="w-full justify-start text-left p-2 sm:p-3 md:p-4 h-auto break-words hover:bg-primary/5 hover:border-primary/30 transition-colors"
                   onClick={() => handleAnswer(currentQuestion.id, option.id)}
                   disabled={submitting}
                 >
-                  <span className="whitespace-normal overflow-visible text-sm sm:text-base">{option.text}</span>
+                  <span className="whitespace-normal overflow-visible text-xs sm:text-sm md:text-base">{option.text}</span>
                 </Button>
               ))}
             </div>
