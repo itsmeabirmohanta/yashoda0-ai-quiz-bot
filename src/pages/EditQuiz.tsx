@@ -441,13 +441,13 @@ const EditQuiz = () => {
                               <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
                                 Q{index + 1}
                               </span>
-                              <h3 className="font-semibold">{question.text}</h3>
+                              <h3 className="font-semibold break-words whitespace-normal">{question.text}</h3>
                             </div>
                             <div className="pl-8 space-y-1">
                               {question.options.map((option) => (
                                 <div 
                                   key={option.id} 
-                                  className={`text-sm p-1 rounded ${
+                                  className={`text-sm p-1 rounded break-words whitespace-normal ${
                                     option.id === question.answer_id ? 'bg-green-100 text-green-800' : ''
                                   }`}
                                 >

@@ -185,12 +185,12 @@ const QuizGate = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Navbar showAdmin={false} />
+        <Navbar showAdmin={false} transparent={true} />
         <div className="flex items-center justify-center h-[80vh]">
-          <div className="text-center p-8">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary border-t-2"></div>
-            <p className="mt-4 text-lg font-medium text-primary">Loading quiz...</p>
-            <p className="text-muted-foreground mt-2">Please wait while we set things up</p>
+          <div className="text-center p-4 sm:p-8">
+            <div className="inline-block animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-primary border-t-2"></div>
+            <p className="mt-4 text-base sm:text-lg font-medium text-primary">Loading quiz...</p>
+            <p className="text-muted-foreground mt-2 text-sm sm:text-base">Please wait while we set things up</p>
           </div>
         </div>
       </div>
@@ -200,18 +200,18 @@ const QuizGate = () => {
   if (!quiz) {
     return (
       <div className="min-h-screen bg-background">
-        <Navbar showAdmin={false} />
-        <div className="flex items-center justify-center h-[80vh]">
-          <Card className="text-center p-8 max-w-md shadow-lg border-2">
+        <Navbar showAdmin={false} transparent={true} />
+        <div className="flex items-center justify-center h-[80vh] px-4">
+          <Card className="text-center p-6 sm:p-8 max-w-md shadow-lg border-2 w-full">
             <CardContent>
               <div className="text-muted-foreground mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
               </div>
-              <h2 className="text-2xl font-bold mb-3">Quiz Not Available</h2>
-              <p className="text-muted-foreground mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold mb-3">Quiz Not Available</h2>
+              <p className="text-muted-foreground mb-6 text-sm sm:text-base">
                 This quiz is either closed, doesn't exist, or has ended.
               </p>
-              <Button asChild className="bg-primary hover:bg-primary/90">
+              <Button asChild className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
                 <Link to="/">Return to Home</Link>
               </Button>
             </CardContent>
@@ -223,27 +223,27 @@ const QuizGate = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar showAdmin={false} showLeaderboard={true} quizId={quizId} />
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <Navbar showAdmin={false} showLeaderboard={true} quizId={quizId} transparent={true} />
+      <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 max-w-2xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-primary-foreground font-bold text-xl">SQ</span>
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
+            <span className="text-primary-foreground font-bold text-lg sm:text-xl">SQ</span>
           </div>
-          <h1 className="text-3xl font-bold mb-2">{quiz.title}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2 break-words whitespace-normal">{quiz.title}</h1>
           {quiz.description && (
-            <p className="text-muted-foreground text-lg">{quiz.description}</p>
+            <p className="text-muted-foreground text-base sm:text-lg break-words whitespace-normal px-2">{quiz.description}</p>
           )}
         </div>
 
         {/* Quiz Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Card className="border-2 shadow-sm hover:shadow transition-shadow">
-            <CardContent className="flex items-center p-4">
-              <Clock className="w-8 h-8 text-primary mr-3" />
+            <CardContent className="flex items-center p-3 sm:p-4">
+              <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-primary mr-2 sm:mr-3 flex-shrink-0" />
               <div>
-                <h3 className="font-semibold">Time Limit</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold text-sm sm:text-base">Time Limit</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {quiz.time_per_question_sec 
                     ? `${quiz.time_per_question_sec} seconds per question`
                     : "No time limit"
@@ -254,23 +254,23 @@ const QuizGate = () => {
           </Card>
 
           <Card className="border-2 shadow-sm hover:shadow transition-shadow">
-            <CardContent className="flex items-center p-4">
-              <Users className="w-8 h-8 text-primary mr-3" />
+            <CardContent className="flex items-center p-3 sm:p-4">
+              <Users className="w-6 h-6 sm:w-8 sm:h-8 text-primary mr-2 sm:mr-3 flex-shrink-0" />
               <div>
-                <h3 className="font-semibold">Format</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold text-sm sm:text-base">Format</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Multiple choice questions
                 </p>
               </div>
             </CardContent>
           </Card>
           
-          <Card className="border-2 shadow-sm hover:shadow transition-shadow">
-            <CardContent className="flex items-center p-4">
-              <Trophy className="w-8 h-8 text-primary mr-3" />
+          <Card className="border-2 shadow-sm hover:shadow transition-shadow sm:col-span-2 md:col-span-1">
+            <CardContent className="flex items-center p-3 sm:p-4">
+              <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-primary mr-2 sm:mr-3 flex-shrink-0" />
               <div>
-                <h3 className="font-semibold">Leaderboard</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold text-sm sm:text-base">Leaderboard</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   See top performers
                 </p>
               </div>
@@ -280,16 +280,16 @@ const QuizGate = () => {
 
         {/* Start Quiz Form */}
         <Card className="border-2 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-primary/10 to-transparent border-b">
-            <CardTitle>Ready to Start?</CardTitle>
-            <CardDescription>
+          <CardHeader className="bg-gradient-to-r from-primary/10 to-transparent border-b py-4 sm:py-6">
+            <CardTitle className="text-lg sm:text-xl">Ready to Start?</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               Enter your name to begin the quiz. You'll see questions one at a time.
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-6">
-            <div className="space-y-6">
+          <CardContent className="pt-4 sm:pt-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-base font-medium">Your Name</Label>
+                <Label htmlFor="name" className="text-sm sm:text-base font-medium">Your Name</Label>
                 <Input
                   id="name"
                   placeholder="Enter your full name"
@@ -297,9 +297,9 @@ const QuizGate = () => {
                   onChange={(e) => setName(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && startQuiz()}
                   maxLength={50}
-                  className="p-6 text-lg"
+                  className="p-4 sm:p-6 text-base sm:text-lg"
                 />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   This will be shown on the leaderboard
                 </p>
               </div>
@@ -307,18 +307,18 @@ const QuizGate = () => {
               <Button 
                 onClick={startQuiz} 
                 disabled={starting || !name.trim()} 
-                className="w-full bg-primary hover:bg-primary/90 p-6 text-lg h-auto"
+                className="w-full bg-primary hover:bg-primary/90 p-4 sm:p-6 text-base sm:text-lg h-auto"
               >
                 {starting ? (
-                  <div className="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-current mr-3"></div>
+                  <div className="inline-block animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-current mr-2 sm:mr-3"></div>
                 ) : (
-                  <ArrowRight className="w-5 h-5 mr-3" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" />
                 )}
                 Start Quiz
               </Button>
 
-              <div className="text-center pt-4">
-                <p className="text-sm text-muted-foreground">
+              <div className="text-center pt-2 sm:pt-4">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Questions cannot be changed once answered
                 </p>
               </div>
