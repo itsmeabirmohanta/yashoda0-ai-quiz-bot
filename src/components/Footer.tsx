@@ -16,8 +16,8 @@ const Footer: React.FC = () => {
             <a href="https://yashoda.ai" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
               <img src="/logos/darkya.png" alt="Yashoda AI" className="h-8" />
             </a>
-            <a href="https://yashoda.ai" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
-              <img src="/logos/FSLHR.png" alt="Yashoda AI Full Logo" className="h-8" />
+            <a href="https://futureshiftlabs.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+              <img src="/logos/FSLHR.png" alt="Future Shift Labs" className="h-8" />
             </a>
             <a href="https://yashoda.ai" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
               <img src="/logos/NCWHR.png" alt="Yashoda AI Alt Logo" className="h-8" />
