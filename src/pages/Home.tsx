@@ -19,7 +19,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [charInputs, setCharInputs] = useState<string[]>(["", "", "", "", "", ""]);
   const [isCodeValid, setIsCodeValid] = useState(false);
-  const [showSingleInput, setShowSingleInput] = useState(isMobile);
+  const [showSingleInput, setShowSingleInput] = useState(true); // Default to single input for all users
   const [singleInputCode, setSingleInputCode] = useState("");
   const [recentParticipants, setRecentParticipants] = useState<{name: string, score: string}[]>([
     { name: "Olivia", score: "9/10" },
@@ -53,6 +53,19 @@ const Home = () => {
       setIsCodeValid(cleanCode.length === 6);
     }
   }, [singleInputCode]);
+  
+  // Focus single input field on component mount
+  useEffect(() => {
+    if (showSingleInput) {
+      const timer = setTimeout(() => {
+        const singleInputElement = document.getElementById('single-input-code') as HTMLInputElement;
+        if (singleInputElement) {
+          singleInputElement.focus();
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [showSingleInput]);
 
   // Handle input focus movement for code entry
   const handleInputChange = (index: number, value: string) => {
@@ -217,7 +230,7 @@ const Home = () => {
                   >
                     {showSingleInput 
                       ? "Switch to separate boxes" 
-                      : "Having trouble? Try single input"}
+                      : "Switch to single input"}
                   </button>
                 </div>
                 
@@ -234,7 +247,8 @@ const Home = () => {
                       autoCapitalize="characters"
                       inputMode="text"
                       pattern="[A-Za-z0-9]*"
-                      placeholder="Enter 6-char code"
+                      placeholder="ABCD12"
+                      autoFocus
                       onClick={(e) => (e.target as HTMLInputElement).select()}
                       onKeyDown={(e) => e.key === 'Enter' && isCodeValid && handleQuizCodeSubmit()}
                     />
@@ -515,7 +529,10 @@ const Home = () => {
               size="lg"
               className="h-auto py-2 sm:py-3 text-base sm:text-lg"
               onClick={() => {
-                document.getElementById('char-input-0')?.focus();
+                const inputElement = document.getElementById('single-input-code');
+                if (inputElement) {
+                  inputElement.focus();
+                }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
