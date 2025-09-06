@@ -54,7 +54,11 @@ const Leaderboard = () => {
         .single();
 
       if (quizError) throw quizError;
-      setQuiz(quizData);
+      // Add quiz_code property to match Quiz type
+      setQuiz({
+        ...quizData,
+        quiz_code: '' // Add the required property with an empty string default
+      } as Quiz);
 
       // Prepare date filter based on time period
       let dateFilter = {};

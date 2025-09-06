@@ -118,7 +118,11 @@ const QuizRunner = () => {
           .single();
 
         if (quizError) throw quizError;
-        setQuiz(quizData);
+        // Add quiz_code property to match Quiz type
+        setQuiz({
+          ...quizData,
+          quiz_code: '' // Add the required property with an empty string default
+        } as Quiz);
 
         // Fetch questions
         const { data: questionsData, error: questionsError } = await supabase

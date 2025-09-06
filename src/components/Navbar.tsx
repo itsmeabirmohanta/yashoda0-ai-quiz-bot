@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, Trophy, Settings, LogOut } from "lucide-react";
+import { Home, Trophy, Settings, LogOut, UserCircle } from "lucide-react";
 import { useAuth } from "@/contexts/useAuth";
 
 interface NavbarProps {
@@ -8,9 +8,10 @@ interface NavbarProps {
   showLeaderboard?: boolean;
   quizId?: string;
   transparent?: boolean;
+  showSignIn?: boolean;
 }
 
-const Navbar = ({ showAdmin = true, showLeaderboard = false, quizId, transparent = false }: NavbarProps) => {
+const Navbar = ({ showAdmin = true, showLeaderboard = false, quizId, transparent = false, showSignIn = false }: NavbarProps) => {
   const location = useLocation();
   const { user, signOut } = useAuth();
   const isAdminRoute = location.pathname.startsWith('/admin');
@@ -20,12 +21,12 @@ const Navbar = ({ showAdmin = true, showLeaderboard = false, quizId, transparent
   };
 
   return (
-    <header className={`border-b ${transparent ? 'bg-card/50 backdrop-blur' : 'bg-card'}`}>
-      <div className="container mx-auto px-4 py-4">
+    <header className={`border-b ${transparent ? 'bg-card/50 backdrop-blur sticky top-0 z-50' : 'bg-card'}`}>
+      <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">SQ</span>
+            <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-base">SQ</span>
             </div>
             <h1 className="text-xl font-bold">
               <span className="text-primary">Swift</span>Quiz
@@ -46,6 +47,15 @@ const Navbar = ({ showAdmin = true, showLeaderboard = false, quizId, transparent
               <Button asChild variant="ghost" size="icon">
                 <Link to="/" title="Home">
                   <Home className="h-5 w-5" />
+                </Link>
+              </Button>
+            )}
+            
+            {/* Show Sign In button if not logged in and showSignIn is true */}
+            {showSignIn && !user && (
+              <Button asChild variant="outline" size="sm">
+                <Link to="/signin">
+                  <UserCircle className="mr-2 h-4 w-4" /> Sign In
                 </Link>
               </Button>
             )}

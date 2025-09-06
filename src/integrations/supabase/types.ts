@@ -156,6 +156,7 @@ export type Database = {
           time_per_question_sec: number | null
           title: string
           updated_at: string
+          quiz_code: string
         }
         Insert: {
           created_at?: string
@@ -168,6 +169,7 @@ export type Database = {
           time_per_question_sec?: number | null
           title: string
           updated_at?: string
+          quiz_code?: string
         }
         Update: {
           created_at?: string
@@ -180,6 +182,7 @@ export type Database = {
           time_per_question_sec?: number | null
           title?: string
           updated_at?: string
+          quiz_code?: string
         }
         Relationships: []
       }

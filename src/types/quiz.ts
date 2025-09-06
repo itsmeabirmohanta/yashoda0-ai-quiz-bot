@@ -7,6 +7,7 @@ export interface Quiz {
   shuffle_questions: boolean;
   shuffle_options: boolean;
   time_per_question_sec: number | null;
+  quiz_code: string;
   created_at: string;
   updated_at: string;
 }

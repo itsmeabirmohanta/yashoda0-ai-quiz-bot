@@ -23,12 +23,33 @@ const QuizGate = () => {
     try {
       console.log("Fetching quiz with ID:", quizId);
       
-      const { data, error } = await supabase
-        .from('quizzes')
-        .select('*')
-        .eq('id', quizId)
-        .eq('is_open', true)
-        .single();
+      let data;
+      let error;
+      
+      // Check if the quizId looks like a UUID or a short code
+      if (quizId && quizId.length === 6 && !/[^A-Z0-9]/i.test(quizId)) {
+        // It's likely a quiz code - fetch by quiz_code
+        const result = await supabase
+          .from('quizzes')
+          .select('*')
+          .eq('is_open', true)
+          .eq('quiz_code', quizId.toUpperCase())
+          .single();
+          
+        data = result.data;
+        error = result.error;
+      } else {
+        // It's likely a UUID - fetch by id
+        const result = await supabase
+          .from('quizzes')
+          .select('*')
+          .eq('is_open', true)
+          .eq('id', quizId)
+          .single();
+          
+        data = result.data;
+        error = result.error;
+      }
 
       if (error) {
         console.error("Error fetching quiz:", error);
@@ -36,7 +57,11 @@ const QuizGate = () => {
       }
       
       console.log("Quiz data retrieved:", data);
-      setQuiz(data);
+      // Add required properties to match Quiz type
+      setQuiz({
+        ...data,
+        quiz_code: '' // Add required field with default value
+      } as Quiz);
     } catch (error) {
       console.error("Failed to fetch quiz:", error);
       toast({
