@@ -22,9 +22,9 @@ const Home = () => {
   const [showSingleInput, setShowSingleInput] = useState(true); // Default to single input for all users
   const [singleInputCode, setSingleInputCode] = useState("");
   const [recentParticipants, setRecentParticipants] = useState<{name: string, score: string}[]>([
-    { name: "Olivia", score: "9/10" },
-    { name: "Noah", score: "8/10" },
-    { name: "Emma", score: "7/10" },
+    { name: "Abir", score: "8/10" },
+    { name: "Parul", score: "7/10" },
+    { name: "Sagar", score: "9/10" },
   ]);
 
   // Update the full quiz code whenever individual characters change
@@ -459,7 +459,7 @@ const Home = () => {
                       <div className="flex items-center gap-3">
                         <div className="text-amber-500 text-lg font-bold">1</div>
                         <div>
-                          <div className="font-medium">Sarah Johnson</div>
+                          <div className="font-medium">Abir Mahanta</div>
                           <div className="text-xs text-muted-foreground">9/10 correct</div>
                         </div>
                       </div>
@@ -470,7 +470,7 @@ const Home = () => {
                       <div className="flex items-center gap-3">
                         <div className="text-gray-500 text-lg font-bold">2</div>
                         <div>
-                          <div className="font-medium">Michael Chen</div>
+                          <div className="font-medium">Sagar Vishnoi</div>
                           <div className="text-xs text-muted-foreground">8/10 correct</div>
                         </div>
                       </div>
@@ -492,7 +492,7 @@ const Home = () => {
                       <div className="flex items-center gap-3">
                         <div className="text-muted-foreground text-lg font-bold">4</div>
                         <div>
-                          <div className="font-medium">Robert Williams</div>
+                          <div className="font-medium">Parul Madan</div>
                           <div className="text-xs text-muted-foreground">7/10 correct</div>
                         </div>
                       </div>

@@ -562,13 +562,14 @@ const EditQuiz = () => {
                     <div className="flex gap-2">
                       <input
                         readOnly
-                        value={`${window.location.origin}/q/${quiz.id}`}
+                        value={new URL(`/q/${quiz.id}`, window.location.origin).toString()}
                         className="flex-1 px-3 py-2 bg-background border rounded-md text-sm"
                       />
                       <Button 
                         variant="outline"
                         onClick={() => {
-                          const shareLink = `${window.location.origin}/q/${quiz.id}`;
+                          const path = `/q/${quiz.id}`;
+                          const shareLink = new URL(path, window.location.origin).toString();
                           navigator.clipboard.writeText(shareLink)
                             .then(() => {
                               toast({

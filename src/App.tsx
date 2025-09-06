@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -24,6 +24,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
+        {/* Use HashRouter instead of BrowserRouter for better compatibility with static hosting */}
         <BrowserRouter>
           <div className="flex flex-col min-h-screen">
             <Routes>

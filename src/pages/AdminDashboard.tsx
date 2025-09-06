@@ -15,7 +15,8 @@ import {
   Copy, 
   ClipboardCopy,
   SearchIcon,
-  Filter
+  Filter,
+  Trophy
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -120,8 +121,10 @@ const AdminDashboard = () => {
   };
 
   const copyQuizLink = (quizId: string) => {
-    const link = `${window.location.origin}/q/${quizId}`;
-    navigator.clipboard.writeText(link);
+    // Create a link that will work both in development and production
+    const path = `/q/${quizId}`;
+    const absoluteUrl = new URL(path, window.location.origin).toString();
+    navigator.clipboard.writeText(absoluteUrl);
     toast({
       title: "Link Copied",
       description: "Quiz link copied to clipboard",
@@ -181,7 +184,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
           <Card className="hover:border-primary/50 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Quizzes</CardTitle>
@@ -248,6 +251,30 @@ const AdminDashboard = () => {
                 With time restrictions
               </p>
             </CardContent>
+          </Card>
+
+          <Card className="hover:border-purple-500/50 transition-all">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Leaderboards</CardTitle>
+              <div className="p-2 bg-purple-500/10 rounded-full">
+                <Trophy className="h-4 w-4 text-purple-500" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {quizzes.length}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Performance analytics
+              </p>
+            </CardContent>
+            <CardFooter className="pt-1 pb-2 px-4">
+              <Button variant="ghost" size="sm" className="w-full text-xs h-7" asChild>
+                <Link to={quizzes.length > 0 ? `/q/${quizzes[0]?.id}/leaderboard` : "#"}>
+                  View Leaderboards
+                </Link>
+              </Button>
+            </CardFooter>
           </Card>
         </div>
 
@@ -427,12 +454,12 @@ const AdminDashboard = () => {
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex justify-between pt-2 border-t bg-muted/50">
+            <CardFooter className="flex flex-col sm:flex-row justify-between pt-2 border-t bg-muted/50 gap-2">
               <div className="flex items-center">
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="ghost" size="sm" onClick={() => copyQuizLink(quiz.id)}>
+                      <Button variant="ghost" size="sm" onClick={() => copyQuizLink(quiz.id)} className="w-full sm:w-auto">
                         <ClipboardCopy className="w-4 h-4 mr-1" />
                         Copy Link
                       </Button>
@@ -443,15 +470,21 @@ const AdminDashboard = () => {
                   </Tooltip>
                 </TooltipProvider>
               </div>
-              <div className="flex space-x-2">
-                <Button variant="outline" size="sm" asChild>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" asChild className="flex-1 sm:flex-initial">
                   <Link to={`/admin/quiz/${quiz.id}`}>
                     <Settings className="w-4 h-4 mr-1" />
                     Edit
                   </Link>
                 </Button>
+                <Button variant="secondary" size="sm" asChild className="flex-1 sm:flex-initial">
+                  <Link to={`/q/${quiz.id}/leaderboard`}>
+                    <Trophy className="w-4 h-4 mr-1" />
+                    Leaderboard
+                  </Link>
+                </Button>
                 {quiz.is_open && (
-                  <Button variant="default" size="sm" asChild>
+                  <Button variant="default" size="sm" asChild className="flex-1 sm:flex-initial">
                     <Link to={`/q/${quiz.id}`}>
                       <Users className="w-4 h-4 mr-1" />
                       View
