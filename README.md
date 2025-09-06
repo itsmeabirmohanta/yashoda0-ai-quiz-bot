@@ -1,73 +1,117 @@
-# Welcome to your Lovable project
+# QuizApp - Interactive Quiz Platform
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/dabb2b8b-5db1-4a08-8c1f-e999af4bd344
+QuizApp is a feature-rich, interactive quiz platform that allows educators, trainers, and event organizers to create, manage, and distribute quizzes. Participants can join quizzes using unique quiz codes and compete on leaderboards.
 
-## How can I edit this code?
+### Key Features
 
-There are several ways of editing your application.
+- **🔐 User Authentication:** Secure admin access for quiz creation and management
+- **📝 Quiz Creation:** Create quizzes with customizable questions and options
+- **🎲 Randomization:** Option to shuffle questions and answers
+- **⏱️ Timed Quizzes:** Set time limits per question
+- **🏆 Leaderboards:** Real-time leaderboards to track participant performance
+- **📱 Responsive Design:** Works on mobile and desktop devices
+- **🔑 Access Codes:** Unique quiz codes for easy access
+- **🧮 Flexible Scoring:** Multiple scoring strategies available
 
-**Use Lovable**
+## Technology Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/dabb2b8b-5db1-4a08-8c1f-e999af4bd344) and start prompting.
+This project is built using modern web technologies:
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend:**
+  - React 18 with TypeScript
+  - Vite for fast development and optimized builds
+  - React Router for navigation
+  - shadcn/ui and TailwindCSS for beautiful UI components
+  - React Query for data fetching and caching
 
-**Use your preferred IDE**
+- **Backend:**
+  - Supabase for database, authentication, and API
+  - PostgreSQL with row-level security policies
+  - Supabase real-time subscriptions for live updates
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
 
-Follow these steps:
+- Node.js 16+ and npm
+- Git
+
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone https://github.com/itsmeabirmohanta/yashoda0-ai-quiz-bot.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd quiz-app
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Database Structure
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The application uses four main tables:
 
-**Use GitHub Codespaces**
+1. **quizzes** - Stores quiz metadata including unique quiz codes
+2. **questions** - Contains questions for each quiz
+3. **attempts** - Records participant quiz attempts
+4. **answers** - Stores individual answers for each attempt
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Recent Updates
 
-## What technologies are used for this project?
+- **Quiz Code Feature:** Each quiz now has a unique 6-character alphanumeric code for easy access
+- **Row-Level Security:** Enhanced security with proper permission policies
+- **Performance Optimizations:** Added database indexes for faster queries
 
-This project is built with:
+## Usage
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Admin Functions
 
-## How can I deploy this project?
+1. Sign in using your admin credentials
+2. Create a new quiz from the admin dashboard
+3. Add questions and answer options
+4. Set quiz parameters (time limits, shuffling, etc.)
+5. Open the quiz for participation
 
-Simply open [Lovable](https://lovable.dev/projects/dabb2b8b-5db1-4a08-8c1f-e999af4bd344) and click on Share -> Publish.
+### Participant Functions
 
-## Can I connect a custom domain to my Lovable project?
+1. Access the quiz using the provided quiz code
+2. Enter your name to start the quiz
+3. Answer questions within the time limit
+4. View your results and position on the leaderboard
 
-Yes, you can!
+## Deployment
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+For detailed deployment instructions, please see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Quick deployment:
+```sh
+# Build the production version
+npm run build
+
+# Preview the production build locally
+npm run preview
+```
+
+## Documentation
+
+- [Database Schema](./DB_SCHEMA.md) - Detailed database structure and relations
+- [Contributing Guidelines](./CONTRIBUTING.md) - How to contribute to this project
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+## Acknowledgements
+
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Supabase](https://supabase.io/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [TailwindCSS](https://tailwindcss.com/)
