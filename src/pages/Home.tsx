@@ -7,16 +7,20 @@ import { useAuth } from "@/contexts/useAuth";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 
 const Home = () => {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [quizCode, setQuizCode] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const [charInputs, setCharInputs] = useState<string[]>(["", "", "", "", "", ""]);
   const [isCodeValid, setIsCodeValid] = useState(false);
+  const [showSingleInput, setShowSingleInput] = useState(isMobile);
+  const [singleInputCode, setSingleInputCode] = useState("");
   const [recentParticipants, setRecentParticipants] = useState<{name: string, score: string}[]>([
     { name: "Olivia", score: "9/10" },
     { name: "Noah", score: "8/10" },
@@ -29,12 +33,35 @@ const Home = () => {
     setQuizCode(code);
     setIsCodeValid(code.length === 6);
   }, [charInputs]);
+  
+  // Handle single input mode changes
+  useEffect(() => {
+    if (singleInputCode) {
+      const cleanCode = singleInputCode.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 6);
+      setSingleInputCode(cleanCode);
+      
+      // Update the individual character inputs
+      const chars = cleanCode.split('');
+      const newInputs = Array(6).fill('');
+      chars.forEach((char, idx) => {
+        if (idx < 6) newInputs[idx] = char;
+      });
+      setCharInputs(newInputs);
+      
+      // Update the quiz code
+      setQuizCode(cleanCode);
+      setIsCodeValid(cleanCode.length === 6);
+    }
+  }, [singleInputCode]);
 
   // Handle input focus movement for code entry
   const handleInputChange = (index: number, value: string) => {
-    if (value.length > 1) {
+    // Filter out non-alphanumeric characters
+    const filteredValue = value.replace(/[^A-Za-z0-9]/g, '');
+    
+    if (filteredValue.length > 1) {
       // For paste events, distribute characters
-      const chars = value.slice(0, 6).split("");
+      const chars = filteredValue.slice(0, 6).split("");
       const newInputs = [...charInputs];
       
       chars.forEach((char, idx) => {
@@ -45,33 +72,69 @@ const Home = () => {
       
       setCharInputs(newInputs);
       
-      // Focus on the appropriate field
-      const nextIndex = Math.min(index + chars.length, 5);
-      document.getElementById(`char-input-${nextIndex}`)?.focus();
+      // Focus on the appropriate field with slight delay for mobile
+      setTimeout(() => {
+        const nextIndex = Math.min(index + chars.length, 5);
+        const nextInput = document.getElementById(`char-input-${nextIndex}`) as HTMLInputElement;
+        if (nextInput) {
+          nextInput.focus();
+          nextInput.select();
+        }
+      }, 10);
     } else {
       // For single character input
       const newInputs = [...charInputs];
-      newInputs[index] = value.toUpperCase();
+      newInputs[index] = filteredValue.toUpperCase();
       setCharInputs(newInputs);
       
       // Focus next input if we entered a character
-      if (value && index < 5) {
-        document.getElementById(`char-input-${index + 1}`)?.focus();
+      if (filteredValue && index < 5) {
+        setTimeout(() => {
+          const nextInput = document.getElementById(`char-input-${index + 1}`) as HTMLInputElement;
+          if (nextInput) {
+            nextInput.focus();
+            nextInput.select();
+          }
+        }, 10);
       }
     }
   };
 
   // Handle backspace key
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === "Backspace" && !charInputs[index] && index > 0) {
-      // Move to previous input when pressing backspace on empty field
+    if (e.key === "Backspace") {
+      if (!charInputs[index] && index > 0) {
+        // Move to previous input when pressing backspace on empty field
+        e.preventDefault(); // Prevent default backspace behavior
+        const prevInput = document.getElementById(`char-input-${index - 1}`) as HTMLInputElement;
+        if (prevInput) {
+          prevInput.focus();
+          prevInput.select();
+          // Optionally clear the previous input
+          const newInputs = [...charInputs];
+          newInputs[index - 1] = "";
+          setCharInputs(newInputs);
+        }
+      } else if (charInputs[index] && e.target instanceof HTMLInputElement) {
+        // Clear current input but stay in the same field
+        const newInputs = [...charInputs];
+        newInputs[index] = "";
+        setCharInputs(newInputs);
+        e.preventDefault(); // Prevent default backspace behavior
+      }
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      // Move to previous input with left arrow
       const prevInput = document.getElementById(`char-input-${index - 1}`) as HTMLInputElement;
       if (prevInput) {
         prevInput.focus();
-        // Optionally clear the previous input
-        const newInputs = [...charInputs];
-        newInputs[index - 1] = "";
-        setCharInputs(newInputs);
+        prevInput.select();
+      }
+    } else if (e.key === "ArrowRight" && index < 5) {
+      // Move to next input with right arrow
+      const nextInput = document.getElementById(`char-input-${index + 1}`) as HTMLInputElement;
+      if (nextInput) {
+        nextInput.focus();
+        nextInput.select();
       }
     }
   };
@@ -145,28 +208,65 @@ const Home = () => {
               </p>
               
               <div className="flex flex-col gap-4 md:gap-6 mb-6 md:mb-8">
-                {/* Code entry boxes */}
-                <div className="flex justify-between gap-1 sm:gap-2">
-                  {charInputs.map((char, index) => (
+                {/* Toggle between input methods */}
+                <div className="flex justify-end">
+                  <button 
+                    type="button" 
+                    className="text-xs sm:text-sm text-primary underline"
+                    onClick={() => setShowSingleInput(!showSingleInput)}
+                  >
+                    {showSingleInput 
+                      ? "Switch to separate boxes" 
+                      : "Having trouble? Try single input"}
+                  </button>
+                </div>
+                
+                {showSingleInput ? (
+                  // Single input box for mobile
+                  <div className="w-full">
                     <Input
-                      key={index}
-                      id={`char-input-${index}`}
-                      className="h-12 sm:h-14 md:h-16 w-10 sm:w-12 text-center text-xl sm:text-2xl font-bold p-0 border-2 focus:border-primary"
-                      maxLength={index === 0 ? 6 : 1} // Allow pasting full code in first input
-                      value={char}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(index, e)}
+                      id="single-input-code"
+                      className="h-14 sm:h-16 md:h-18 w-full text-center text-xl sm:text-2xl font-bold border-2 focus:border-primary"
+                      maxLength={6}
+                      value={singleInputCode}
+                      onChange={(e) => setSingleInputCode(e.target.value)}
                       autoComplete="off"
                       autoCapitalize="characters"
+                      inputMode="text"
+                      pattern="[A-Za-z0-9]*"
+                      placeholder="Enter 6-char code"
+                      onClick={(e) => (e.target as HTMLInputElement).select()}
+                      onKeyDown={(e) => e.key === 'Enter' && isCodeValid && handleQuizCodeSubmit()}
                     />
-                  ))}
-                </div>
+                  </div>
+                ) : (
+                  // Individual code entry boxes
+                  <div className="flex justify-between gap-1 sm:gap-2">
+                    {charInputs.map((char, index) => (
+                      <Input
+                        key={index}
+                        id={`char-input-${index}`}
+                        className="h-14 sm:h-16 md:h-18 w-12 sm:w-14 text-center text-xl sm:text-2xl font-bold p-0 border-2 focus:border-primary"
+                        maxLength={index === 0 ? 6 : 1} // Allow pasting full code in first input
+                        value={char}
+                        onChange={(e) => handleInputChange(index, e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(index, e)}
+                        autoComplete="off"
+                        autoCapitalize="characters"
+                        inputMode="text"
+                        pattern="[A-Za-z0-9]*"
+                        onClick={(e) => (e.target as HTMLInputElement).select()}
+                        style={{touchAction: "manipulation"}}
+                      />
+                    ))}
+                  </div>
+                )}
                 
                 <Button 
                   onClick={handleQuizCodeSubmit} 
                   disabled={isSearching || !isCodeValid}
                   size="lg" 
-                  className="w-full text-base sm:text-lg h-auto py-2 sm:py-3"
+                  className="w-full text-base sm:text-lg h-auto py-3 sm:py-4"
                 >
                   {isSearching ? (
                     <div className="inline-block animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-current mr-2 sm:mr-3"></div>
