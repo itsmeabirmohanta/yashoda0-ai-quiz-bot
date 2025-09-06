@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fix Quiz App Permissions</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    h1 { color: #2563eb; }
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    button:hover { background-color: #1d4ed8; }
+    pre {
+      background-color: #f1f5f9;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    .success { color: #16a34a; }
+    .error { color: #dc2626; }
+    .container { margin-top: 20px; }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin: 10px 0;
+      padding: 10px;
+      font-family: monospace;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>SwiftQuiz Permission Fix Tool</h1>
+  
+  <div>
+    <h2>Step 1: Disable RLS</h2>
+    <button onclick="disableRLS()">Disable RLS</button>
+    <div id="disableResult"></div>
+  </div>
+
+  <div class="container">
+    <h2>Step 2: Test Quiz Creation</h2>
+    <button onclick="testQuizCreation()">Test Creating a Quiz</button>
+    <div id="createResult"></div>
+  </div>
+
+  <div class="container">
+    <h2>Custom SQL (Optional)</h2>
+    <p>Run custom SQL commands if needed:</p>
+    <textarea id="customSQL">-- Enter your SQL here</textarea>
+    <button onclick="runCustomSQL()">Run Custom SQL</button>
+    <div id="customSqlResult"></div>
+  </div>
+
+  <script>
+    // Initialize Supabase client
+    const SUPABASE_URL = "https://ugmzhjfgrdqrpklhjbyg.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnbXpoamZncmRxcnBrbGhqYnlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNjMxNTUsImV4cCI6MjA3MjczOTE1NX0.zsZ9kIPDPnwDr2S57E8mYlygu5es57sFV0omzmhcuuc";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Disable Row Level Security
+    async function disableRLS() {
+      const disableResult = document.getElementById('disableResult');
+      disableResult.innerHTML = '<p>Attempting to disable RLS...</p>';
+      
+      try {
+        // We can't directly disable RLS through SQL with anon key, but we can try to create a quiz
+        // This will work if RLS is already disabled or if we have proper policies
+        const { data, error } = await supabase
+          .from('quizzes')
+          .insert({
+            title: 'Test Quiz',
+            description: 'Testing if we can insert without RLS',
+            is_open: false,
+            shuffle_questions: false,
+            shuffle_options: false
+          })
+          .select();
+        
+        if (error) {
+          disableResult.innerHTML = `<p class="error">Could not create test quiz: ${error.message}</p>
+            <p>You will need to disable RLS manually in the Supabase dashboard:</p>
+            <ol>
+              <li>Go to <a href="https://app.supabase.com/project/ugmzhjfgrdqrpklhjbyg/editor" target="_blank">Supabase SQL Editor</a></li>
+              <li>Run this SQL:
+                <pre>ALTER TABLE public.quizzes DISABLE ROW LEVEL SECURITY;</pre>
+              </li>
+            </ol>`;
+        } else {
+          disableResult.innerHTML = `<p class="success">RLS is either disabled or has proper policies. You should be able to create quizzes now.</p>
+            <pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+      } catch (err) {
+        disableResult.innerHTML = `<p class="error">Error: ${err.message}</p>`;
+      }
+    }
+
+    // Test quiz creation
+    async function testQuizCreation() {
+      const createResult = document.getElementById('createResult');
+      createResult.innerHTML = '<p>Testing quiz creation...</p>';
+      
+      try {
+        const { data, error } = await supabase
+          .from('quizzes')
+          .insert({
+            title: 'Quiz Test ' + new Date().toLocaleTimeString(),
+            description: 'This is a test quiz created to verify permissions',
+            is_open: false,
+            shuffle_questions: false,
+            shuffle_options: false
+          })
+          .select();
+        
+        if (error) {
+          createResult.innerHTML = `<p class="error">Failed to create quiz: ${error.message}</p>`;
+        } else {
+          createResult.innerHTML = `<p class="success">Successfully created quiz!</p>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+            <p>Your app should now be working correctly.</p>`;
+        }
+      } catch (err) {
+        createResult.innerHTML = `<p class="error">Error: ${err.message}</p>`;
+      }
+    }
+
+    // Run custom SQL
+    async function runCustomSQL() {
+      const customSqlResult = document.getElementById('customSqlResult');
+      customSqlResult.innerHTML = '<p>Running custom SQL...</p>';
+      
+      const sql = document.getElementById('customSQL').value;
+      
+      try {
+        // Note: This won't work with the anon key - it's just here for completeness
+        const { data, error } = await supabase.rpc('exec_sql', { sql });
+        
+        if (error) {
+          customSqlResult.innerHTML = `<p class="error">SQL Error: ${error.message}</p>
+            <p>Note: Running arbitrary SQL requires admin privileges. You'll need to run this in the Supabase dashboard SQL editor.</p>`;
+        } else {
+          customSqlResult.innerHTML = `<p class="success">SQL executed successfully!</p>`;
+        }
+      } catch (err) {
+        customSqlResult.innerHTML = `<p class="error">Error: ${err.message}</p>
+          <p>Note: Running arbitrary SQL requires admin privileges. You'll need to run this in the Supabase dashboard SQL editor.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>

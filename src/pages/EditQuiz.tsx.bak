@@ -1,0 +1,277 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Plus } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Quiz, Question, QuestionOption } from "@/types/quiz";
+import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { v4 as uuidv4 } from 'uuid';
+
+const EditQuiz = () => {
+  const { id } = useParams<{ id: string }>();
+  const { toast } = useToast();
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
+  const [addingQuestion, setAddingQuestion] = useState(false);
+  const [questionForm, setQuestionForm] = useState({
+    text: "",
+    options: [
+      { id: uuidv4(), text: "" },
+      { id: uuidv4(), text: "" },
+      { id: uuidv4(), text: "" },
+      { id: uuidv4(), text: "" }
+    ],
+    answer_id: ""
+  });
+
+  const fetchQuiz = useCallback(async () => {
+    if (!id) return;
+    
+    try {
+      console.log('Fetching quiz with ID:', id);
+      const { data, error } = await supabase
+        .from('quizzes')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching quiz:', error);
+        throw error;
+      }
+      console.log('Quiz data retrieved:', data);
+      setQuiz(data);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to fetch quiz:', error);
+      toast({
+        title: "Error",
+        description: `Failed to fetch quiz: ${errorMessage}`,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [id, toast]);
+
+  const fetchQuestions = useCallback(async () => {
+    if (!id) return;
+    
+    try {
+      console.log('Fetching questions for quiz ID:', id);
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*')
+        .eq('quiz_id', id)
+        .order('order_num', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching questions:', error);
+        throw error;
+      }
+      
+      console.log('Questions data retrieved:', data);
+      // Parse the JSON options properly
+      if (data) {
+        const parsedQuestions: Question[] = data.map(q => ({
+          ...q,
+          options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options,
+        }));
+        setQuestions(parsedQuestions);
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to fetch questions:', error);
+      toast({
+        title: "Error",
+        description: `Failed to fetch questions: ${errorMessage}`,
+        variant: "destructive",
+      });
+    }
+  }, [id, toast]);
+
+  useEffect(() => {
+    if (id) {
+      fetchQuiz();
+      fetchQuestions();
+    }
+  }, [id, fetchQuiz, fetchQuestions]);
+    try {
+      console.log('Fetching quiz with ID:', id);
+      const { data, error } = await supabase
+        .from('quizzes')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching quiz:', error);
+        throw error;
+      }
+      console.log('Quiz data retrieved:', data);
+      setQuiz(data);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to fetch quiz:', error);
+      toast({
+        title: "Error",
+        description: `Failed to fetch quiz: ${errorMessage}`,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="mt-2 text-muted-foreground">Loading quiz...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!quiz) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="text-center p-8">
+          <CardContent>
+            <h2 className="text-2xl font-bold mb-2">Quiz Not Found</h2>
+            <p className="text-muted-foreground mb-4">
+              The quiz you're looking for doesn't exist or has been deleted.
+            </p>
+            <Button asChild>
+              <Link to="/admin">Back to Dashboard</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card/50 backdrop-blur">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/admin">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Dashboard
+              </Link>
+            </Button>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">SQ</span>
+              </div>
+              <h1 className="text-xl font-bold text-primary">SwiftQuiz</h1>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold mb-2">{quiz.title}</h2>
+          <p className="text-muted-foreground">
+            {quiz.description || "No description provided"}
+          </p>
+        </div>
+
+        {/* Quiz Management Cards */}
+        <div className="grid gap-6 max-w-4xl">
+          <Card>
+            <CardHeader>
+              <CardTitle>Questions</CardTitle>
+              <CardDescription>
+                Add and manage questions for this quiz
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <h3 className="text-lg font-semibold mb-2">No questions yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Add your first question to get started.
+                </p>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Question
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Quiz Settings</CardTitle>
+              <CardDescription>
+                Configure quiz availability and sharing
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-secondary rounded-lg">
+                  <div>
+                    <h4 className="font-semibold">Quiz Status</h4>
+                    <p className="text-sm text-muted-foreground">
+                      {quiz.is_open ? "Quiz is currently open for participants" : "Quiz is closed"}
+                    </p>
+                  </div>
+                  <Button variant={quiz.is_open ? "destructive" : "default"}>
+                    {quiz.is_open ? "Close Quiz" : "Open Quiz"}
+                  </Button>
+                </div>
+
+                {quiz.is_open && (
+                  <div className="p-4 bg-primary/5 rounded-lg">
+                    <h4 className="font-semibold mb-2">Share Link</h4>
+                    <div className="flex gap-2">
+                      <input
+                        readOnly
+                        value={`${window.location.origin}/q/${quiz.id}`}
+                        className="flex-1 px-3 py-2 bg-background border rounded-md text-sm"
+                      />
+                      <Button variant="outline">Copy</Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Quiz Analytics</CardTitle>
+              <CardDescription>
+                View participation and performance data
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <h3 className="text-lg font-semibold mb-2">No data yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Analytics will appear once participants start taking the quiz.
+                </p>
+                <Button variant="outline">View Leaderboard</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditQuiz;
